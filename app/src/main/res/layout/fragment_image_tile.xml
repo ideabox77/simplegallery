@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/photo_image"
+        />
+    <GridView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:background="@android:color/transparent"
+        android:numColumns="@integer/gallery_column_count"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:textColor="#55000000"
+        android:visibility="gone"
+        android:textSize="@dimen/image_title_text_size"
+        />
+
+    <ImageView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center"
+        android:src="@drawable/no_image"
+        />
+</FrameLayout>

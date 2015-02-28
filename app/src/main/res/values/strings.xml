@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">SimpleGallery</string>
+
+    <string name="camera_roll_title">Camera Roll</string>
+    <string name="share_title">Share Items</string>
+    <string name="delete_title">Delete Items</string>
+    <string name="camera_roll_popup_title">Input Title</string>
+
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="image_save_complete">Image Save completed.</string>
+    <string name="image_delete_complete">Image delete completed.</string>
+    <string name="image_update_complete">Image Update completed.</string>
+
+    <string name="image_delete_message">Delete <xliff>%s</xliff> item(s)?</string>
+    <string name="item_selected_count"><xliff>%s</xliff> Item Selected</string>
+    <string name="item_no_selected">No item selected.</string>
+
+    <string name="main_quit">"Touch one more time to Exit"</string>
+</resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="@dimen/common_layout_padding"
+    android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/dialog_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/abc_edit_text_material"
+        android:inputType="text"
+        />
+</FrameLayout>
