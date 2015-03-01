@@ -374,7 +374,7 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
 
     /**
      *
-     * get the
+     * get the middle point of two fingers
      *
      * @param point
      * @param event
