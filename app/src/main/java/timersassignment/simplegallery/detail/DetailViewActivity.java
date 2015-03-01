@@ -2,16 +2,10 @@ package timersassignment.simplegallery.detail;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 import timersassignment.simplegallery.GalleryIntents;
 import timersassignment.simplegallery.R;

@@ -20,7 +20,7 @@ import timersassignment.simplegallery.image.DiskImageLoader;
 
 /**
  *
- * apeear to Main Screen
+ * apeear to Main Screenin TAG_MODE
  *
  * @author Byungchul, Cho
  * @version 1.0
@@ -54,7 +54,12 @@ public class MainTagFragment extends CheckableImageGridFragment implements Adapt
     public Loader onCreateLoader(int id, Bundle args) {
         return new DiskImageLoader(getActivity(), mSavedIds);
     }
-
+    /**
+     *
+     * When load images from disk, select with id list
+     * that contains title information
+     *
+     */
     private void loadSavedIds() {
         Map<String, Object> map = GalleryStorage.getAllTitle(getActivity());
         if(map != null && map.size() > 0) {

@@ -123,10 +123,7 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
         builder.setPositiveButton(getString(R.string.common_ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getActivity(), ImageSaveService.class);
-                intent.setAction(GalleryIntents.ACTION_DELETE);
-                intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, checkedItems);
-                getActivity().startService(intent);
+                startDeleteItems(checkedItems);
             }
         });
         builder.setNegativeButton(getString(R.string.common_cancel), new DialogInterface.OnClickListener() {
@@ -136,6 +133,13 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
             }
         });
         builder.show();
+    }
+
+    private void startDeleteItems(final ArrayList<Integer> items) {
+        Intent intent = new Intent(getActivity(), ImageSaveService.class);
+        intent.setAction(GalleryIntents.ACTION_DELETE);
+        intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
+        getActivity().startService(intent);
     }
 
     public void shareCheckedItems() {
@@ -193,7 +197,6 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(isCheckMode()) {
-            ImageListAdapter.ImageItem item  = (ImageListAdapter.ImageItem)view.getTag();
             mImageAdapter.checkId(id);
         }
 

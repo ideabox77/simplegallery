@@ -15,7 +15,7 @@ import timersassignment.simplegallery.image.InternalImageLoader;
 
 /**
  *
- * apeear to Main Screen in TAG_MODE
+ * apeear to Main Screen not in TAG_MODE
  *
  * @author Byungchul, Cho
  * @version 1.0

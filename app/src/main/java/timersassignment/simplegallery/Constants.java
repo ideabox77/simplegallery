@@ -1,23 +1,21 @@
 package timersassignment.simplegallery;
 
 /**
- * Created by Chobyungchul on 15. 2. 26..
+ * Contains App's static values
  */
 public class Constants {
+    /**
+     *
+     * TAG_MODE implies the way of managing images.
+     * In TAG_MODE, you can just save image id and another informations
+     * And When you see images that you entitled, you just Read from disk again
+     *
+     * If the TAG_MODE is false, you can copy images from disk to your app and managed through
+     * app's own database. And even if the image is removed from the disk,
+     * your image still available
+     *
+     *
+     */
     public static final boolean TAG_MODE = false;
 
-/**
- *
- *
- * @author Byungchul, Cho
- * @version 1.0,
- */
-
-
-    /**
-     * 메서드의 기능설명은 한 두줄로 간결하게..
-     *
-     * @param int list1 메서드의 파라미터 설명, type명과 변수명을 적고 간략하게 설명
-     * @return
-     */
 }

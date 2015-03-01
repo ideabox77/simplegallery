@@ -4,7 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="image_title_text_size">12dp</dimen>
-    <dimen name="image_title_padding">5dip</dimen>
+    <dimen name="image_title_padding">10dip</dimen>
 
     <dimen name="common_layout_padding">20dip</dimen>
 

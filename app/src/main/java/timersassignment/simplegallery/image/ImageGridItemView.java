@@ -97,11 +97,10 @@ public class ImageGridItemView extends FrameLayout implements Checkable{
 
         LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.BOTTOM;
-
         TextView textView = new TextView(getContext());
         textView.setLayoutParams(params);
         textView.setPadding(padding, padding, padding, padding);
-        textView.setBackgroundColor(0x55000000);
+        textView.setBackgroundColor(getResources().getColor(R.color.title_background));
         textView.setTextColor(Color.WHITE);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.image_title_text_size));
         return textView;
