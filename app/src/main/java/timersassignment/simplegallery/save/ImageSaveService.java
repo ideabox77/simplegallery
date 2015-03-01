@@ -5,21 +5,19 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Gallery;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import timersassignment.simplegallery.GalleryIntents;
-import timersassignment.simplegallery.R;
-import timersassignment.simplegallery.image.ImageListAdapter;
-import timersassignment.simplegallery.image.ImageTable;
 
 /**
  *
@@ -49,6 +47,9 @@ public class ImageSaveService extends IntentService {
         } else if(GalleryIntents.ACTION_DELETE.equals(intent.getAction())) {
             ArrayList<Integer> checkedIds = intent.getIntegerArrayListExtra(GalleryIntents.EXTRA_IMAGE_IDS);
             deleteImages(checkedIds);
+        } else if(GalleryIntents.ACTION_SHARE.equals(intent.getAction())) {
+            ArrayList<Integer> checkedIds = intent.getIntegerArrayListExtra(GalleryIntents.EXTRA_IMAGE_IDS);
+            shareImages(checkedIds);
         }
     }
 
@@ -83,12 +84,10 @@ public class ImageSaveService extends IntentService {
         }
     }
 
-    private void deleteImages(ArrayList<Integer> ids) {
+    private List<String> queryExistImagePath(ArrayList<Integer> ids) {
         ImageDatabaseHelper helper = new ImageDatabaseHelper(this);
         SQLiteDatabase db = helper.getReadableDatabase();
-
-        ArrayList<String> fileToDelete = new ArrayList<String>();
-
+        List<String> pathList = new ArrayList<String>();
         Cursor cursor = db.query(ImageDatabaseHelper.IMAGE_TABLE.TABLE_NAME,
                 new String[] { MediaStore.Images.Media._ID, MediaStore.Images.Media.DATA },
                 MediaStore.Images.Media._ID + getInSelectionFromIds(ids),
@@ -98,14 +97,66 @@ public class ImageSaveService extends IntentService {
                 cursor.moveToPosition(-1);
                 while(cursor.moveToNext()) {
                     String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-                    fileToDelete.add(path);
+                    pathList.add(path);
                 }
             }
         } finally {
             if(cursor != null) {
                 cursor.close();
             }
+            return pathList;
         }
+    }
+
+    private void shareImages(ArrayList<Integer> ids) {
+        List<String> fileToShare = queryExistImagePath(ids);
+        List<String> backupFileList = new ArrayList<String>();
+        ArrayList<Uri> shareImageUriList = new ArrayList<Uri>();
+
+        for(String path : fileToShare) {
+            File file = new File(path);
+            if(file.exists()) {
+                Log.v(TAG, "Share file at " + path);
+                String name = file.getName();
+                String newName = SaveUtils.getTempPath(this) + name;
+                boolean succeed = copyFile(file, newName);
+                if(succeed) {
+                    backupFileList.add(newName);
+                }
+            }
+        }
+
+        for(String path : backupFileList) {
+            shareImageUriList.add(getImageUri(path));
+        }
+
+        Intent intent = new Intent(GalleryIntents.ACTION_SHARE);
+        intent.putExtra(GalleryIntents.EXTRA_IMAGE_URI, shareImageUriList);
+        sendBroadcast(intent);
+//        if(!shareImageUriList.isEmpty()) {
+//            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+//            intent.setType("image/jpg");
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            intent.putExtra(Intent.EXTRA_STREAM, shareImageUriList);
+//            startActivity(Intent.createChooser(intent, "Choose"));
+//        }
+    }
+
+    private Uri getImageUri(String path) {
+        File file = new File(path);
+        if(file.exists()) {
+            return Uri.fromFile(file);
+        } else {
+            return null;
+        }
+    }
+
+    private void deleteImages(ArrayList<Integer> ids) {
+        ImageDatabaseHelper helper = new ImageDatabaseHelper(this);
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        List<String> fileToDelete = queryExistImagePath(ids);
+
         deleteImageData(ids);
         for(String path : fileToDelete) {
             File file = new File(path);

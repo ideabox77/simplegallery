@@ -16,5 +16,7 @@
     <string name="item_selected_count"><xliff>%s</xliff> Item Selected</string>
     <string name="item_no_selected">No item selected.</string>
 
+    <string name="error_share_failed">No Items to share</string>
+
     <string name="main_quit">"Touch one more time to Exit"</string>
 </resources>

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +21,7 @@ import java.util.HashMap;
 import timersassignment.simplegallery.GalleryIntents;
 import timersassignment.simplegallery.R;
 import timersassignment.simplegallery.save.ImageSaveService;
+import timersassignment.simplegallery.save.SaveUtils;
 
 /**
  *
@@ -36,6 +36,7 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     private static final String KEY_CHECK_STATE = "checkState";
     private static final String KEY_CHECK_MODE = "checkMode";
     private CheckableGridFragmentListener mCheckListener;
+    private static final int REQUEST_CODE_SHARE = 1001;
 
     private CheckableImageListAdapter mImageAdapter;
     public interface CheckableGridFragmentListener {
@@ -65,6 +66,7 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     private void registerReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(GalleryIntents.ACTION_DELETE);
+        intentFilter.addAction(GalleryIntents.ACTION_SHARE);
         getActivity().registerReceiver(mReceiver, intentFilter);
     }
 
@@ -75,6 +77,13 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
                 Log.v(TAG, "delete finished");
                 loadImage();
                 setCheckMode(false);
+            } else if(GalleryIntents.ACTION_SHARE.equals(intent.getAction())) {
+                ArrayList<Uri> shareImageUriList = intent.getParcelableArrayListExtra(GalleryIntents.EXTRA_IMAGE_URI);
+                if(shareImageUriList != null && !shareImageUriList.isEmpty()) {
+                    startShareIntent(shareImageUriList);
+                } else {
+                    Toast.makeText(context, R.string.error_share_failed, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     };
@@ -143,8 +152,12 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     }
 
     public void shareCheckedItems() {
-        ArrayList<Integer> checkedItems = mImageAdapter.getCheckedImageList();
-
+        ArrayList<Integer> items = mImageAdapter.getCheckedImageList();
+        Intent intent = new Intent(getActivity(), ImageSaveService.class);
+        intent.setAction(GalleryIntents.ACTION_SHARE);
+        intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
+        getActivity().startService(intent);
+/*
         if(checkedItems.size() == 0) {
             Toast.makeText(getActivity(), R.string.item_no_selected, Toast.LENGTH_SHORT).show();
             return;
@@ -169,6 +182,7 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
             intent.putExtra(Intent.EXTRA_STREAM, shareImageUriList);
             startActivity(Intent.createChooser(intent, "Choose"));
         }
+        */
     }
 
     private Uri getImageUri(String path) {
@@ -210,4 +224,19 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
         getActivity().unregisterReceiver(mReceiver);
     }
 
+    private void startShareIntent(ArrayList<Uri> shareImageUriList) {
+        Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        intent.setType("image/jpg");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Intent.EXTRA_STREAM, shareImageUriList);
+        startActivityForResult(Intent.createChooser(intent, "Choose"), REQUEST_CODE_SHARE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_SHARE) {
+            SaveUtils.cleanTempFiles(getActivity());
+        }
+    }
 }

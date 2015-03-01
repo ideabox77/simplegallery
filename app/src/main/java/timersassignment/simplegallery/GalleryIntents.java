@@ -11,6 +11,7 @@ public class GalleryIntents {
     public static final String ACTION_SAVE = "timersassignment.simplegallery.save";
     public static final String ACTION_DELETE = "timersassignment.simplegallery.delete";
     public static final String ACTION_UPDATE = "timersassignment.simplegallery.update";
+    public static final String ACTION_SHARE = "timersassignment.simplegallery.share";
 
     public static final String EXTRA_IMAGE_IDS = "timersassignment.simplegallery.ids";
     public static final String EXTRA_IMAGE_URI = "timersassignment.simplegallery.uri";
