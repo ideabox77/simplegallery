@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Gallery;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -152,9 +151,6 @@ public class ImageSaveService extends IntentService {
     }
 
     private void deleteImages(ArrayList<Integer> ids) {
-        ImageDatabaseHelper helper = new ImageDatabaseHelper(this);
-        SQLiteDatabase db = helper.getReadableDatabase();
-
         List<String> fileToDelete = queryExistImagePath(ids);
 
         deleteImageData(ids);

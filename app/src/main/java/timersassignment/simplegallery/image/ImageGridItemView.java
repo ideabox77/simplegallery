@@ -31,7 +31,7 @@ public class ImageGridItemView extends FrameLayout implements Checkable{
 
     private ImageView mPhotoView;
     private TextView mTitleView;
-    private CheckBox mCheckBox;
+    private View mCheckBox;
 
     public ImageGridItemView(Context context) {
         super(context);
@@ -61,16 +61,15 @@ public class ImageGridItemView extends FrameLayout implements Checkable{
 
     public void setCheckBox(boolean show) {
         if(mCheckBox == null) {
-            mCheckBox = new CheckBox(getContext());
+            mCheckBox = new View(getContext());
             mCheckBox.setClickable(false);
             mCheckBox.setFocusable(false);
-            int size = getResources().getDimensionPixelSize(R.dimen.common_checkbox_size);
-            int margin = getResources().getDimensionPixelSize(R.dimen.common_checkbox_padding);
-            LayoutParams params = new LayoutParams(size, size);
-            params.rightMargin = margin;
-            params.topMargin = margin;
+            LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+   //         params.rightMargin = margin;
+   //         params.topMargin = margin;
             params.gravity = Gravity.TOP | Gravity.RIGHT;
             mCheckBox.setLayoutParams(params);
+            mCheckBox.setBackgroundResource(R.drawable.check_btn);
             addView(mCheckBox);
         }
         mCheckBox.bringToFront();
@@ -108,16 +107,16 @@ public class ImageGridItemView extends FrameLayout implements Checkable{
 
     @Override
     public void setChecked(boolean checked) {
-        mCheckBox.setChecked(checked);
+        setCheckBox(checked);
     }
 
     @Override
     public boolean isChecked() {
-        return mCheckBox.isChecked();
+        return mCheckBox.getVisibility() == View.VISIBLE;
     }
 
     @Override
     public void toggle() {
-        mCheckBox.toggle();;
+        setChecked(!isChecked());
     }
 }
