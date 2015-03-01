@@ -198,10 +198,9 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(isCheckMode()) {
             mImageAdapter.checkId(id);
-        }
-
-        if(mCheckListener != null) {
-            mCheckListener.onCheckStateChanged(mImageAdapter.getCheckedImageList().size());
+            if(mCheckListener != null) {
+                mCheckListener.onCheckStateChanged(mImageAdapter.getCheckedImageList().size());
+            }
         }
     }
 
