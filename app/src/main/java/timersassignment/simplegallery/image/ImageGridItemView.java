@@ -65,8 +65,6 @@ public class ImageGridItemView extends FrameLayout implements Checkable{
             mCheckBox.setClickable(false);
             mCheckBox.setFocusable(false);
             LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-   //         params.rightMargin = margin;
-   //         params.topMargin = margin;
             params.gravity = Gravity.TOP | Gravity.RIGHT;
             mCheckBox.setLayoutParams(params);
             mCheckBox.setBackgroundResource(R.drawable.check_btn);

@@ -52,10 +52,11 @@ public class CheckableImageListAdapter extends ImageListAdapter
     @Override
     public void bindView(View view, Context context, Cursor cursor, long id) {
         if(view instanceof ImageGridItemView) {
-            Boolean isChecked = mCheckedStateMap.containsKey(id);
-
-            ((ImageGridItemView)view).setCheckBox(mCheckMode);
-            ((ImageGridItemView)view).setChecked(isChecked(id));
+            if(mCheckMode) {
+                ((ImageGridItemView)view).setChecked(isChecked(id));
+            } else {
+                ((ImageGridItemView)view).setCheckBox(false);
+            }
         }
     }
 
@@ -80,11 +81,7 @@ public class CheckableImageListAdapter extends ImageListAdapter
     }
 
     public void checkId(long id) {
-        if(isChecked(id)) {
-            mCheckedStateMap.put(id, false);
-        } else {
-            mCheckedStateMap.put(id, true);
-        }
+        mCheckedStateMap.put(id, !isChecked(id));
         notifyDataSetChanged();
     }
 
