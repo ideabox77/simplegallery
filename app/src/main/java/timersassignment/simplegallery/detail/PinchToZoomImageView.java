@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.FloatMath;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,8 +21,12 @@ import timersassignment.simplegallery.image.CanvasRotateImageView;
  * @version 1.0
  */
 public class PinchToZoomImageView extends CanvasRotateImageView implements View.OnTouchListener {
+    private static final String TAG = "PinchToZoomImageView";
+
     private Matrix matrix = new Matrix();
     private Matrix moveMatrix = new Matrix();
+
+    public static final float ZOOM_OUT_LIMIT_RATE = (float)0.4;
 
     /*
      * user action status mode when user do noting
@@ -69,7 +74,7 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
     private int scaledImageWidth;
     private int scaledImageHeight;
 
-    private int fitScaledImageWith;
+    private int fitScaledImageWidth;
     private int fitScaledImageHeight;
 
     /*
@@ -126,6 +131,7 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
             return;
         }
         mIsCanvasRotated = getOrientation() != 0 && getOrientation() != 180;
+        Log.v(TAG, "image orientation : " + getOrientation());
         if(mIsCanvasRotated) {
             imageWidth = drawable.getIntrinsicHeight();
             imageHeight = drawable.getIntrinsicWidth();
@@ -133,9 +139,9 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
             imageWidth = drawable.getIntrinsicWidth();
             imageHeight = drawable.getIntrinsicHeight();
         }
-        if (imageWidth > width || imageHeight > height) {
-            setImageFitOnView();
-        }
+        setImageFitOnView();
+        fitScaledImageWidth = scaledImageWidth;
+        fitScaledImageHeight = scaledImageHeight;
         setCenter(true);
         matrix.setValues(value);
         setImageMatrix(matrix);
@@ -144,19 +150,22 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
      * adjust image size to fit for view
      */
     private void setImageFitOnView() {
-        int target = imageWidth > imageHeight ? WIDTH : HEIGHT;
-        if (target == WIDTH) {
-            value[VALUE_INDEX_SCALE_RATE_Y] = (float)width / (float)imageWidth;
-            value[VALUE_INDEX_SCALE_RATE_X] = value[VALUE_INDEX_SCALE_RATE_Y];
-        } else if (target == HEIGHT) {
+        value[VALUE_INDEX_SCALE_RATE_Y] = (float)width / (float)imageWidth;
+        value[VALUE_INDEX_SCALE_RATE_X] = value[VALUE_INDEX_SCALE_RATE_Y];
+
+        setScaledImageSize();
+
+        if(width < scaledImageWidth || height < scaledImageHeight) {
             value[VALUE_INDEX_SCALE_RATE_Y] = (float)height / (float)imageHeight;
             value[VALUE_INDEX_SCALE_RATE_X] = value[VALUE_INDEX_SCALE_RATE_Y];
+            setScaledImageSize();
         }
 
+    }
+
+    private void setScaledImageSize() {
         scaledImageWidth = (int) (imageWidth * value[VALUE_INDEX_SCALE_RATE_X]);
         scaledImageHeight = (int) (imageHeight * value[VALUE_INDEX_SCALE_RATE_Y]);
-        fitScaledImageHeight = scaledImageHeight;
-        fitScaledImageWith = scaledImageWidth;
     }
 
     @Override
@@ -251,12 +260,10 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
      * @return recalculated value
      */
     private void setCenter(boolean init) {
-        scaledImageWidth = (int) (imageWidth * value[VALUE_INDEX_SCALE_RATE_X]);
-        scaledImageHeight = (int) (imageHeight * value[VALUE_INDEX_SCALE_RATE_Y]);
+        setScaledImageSize();
 
         if(scaledImageWidth <= width) {
-            float scaleOffset = mIsCanvasRotated ?
-                    (float)(scaledImageHeight / 2) - (float)(scaledImageWidth / 2) : 0;
+            float scaleOffset = getScaledOffsetX(getOrientation());
             value[VALUE_INDEX_MOVED_DISTANCE_X] =
                     (float)(width / 2) - (float)(scaledImageWidth / 2) - scaleOffset;
             if(init) {
@@ -264,8 +271,7 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
             }
         }
         if(scaledImageHeight <= height) {
-            float scaleOffset = mIsCanvasRotated ?
-                    (float)(scaledImageWidth / 2) - (float)(scaledImageHeight / 2): 0;
+            float scaleOffset = getScaledOffsetY(getOrientation());
             value[VALUE_INDEX_MOVED_DISTANCE_Y] =
                     (float)(height / 2) - (float)(scaledImageHeight / 2) - scaleOffset;
             if(init) {
@@ -273,6 +279,37 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
             }
         }
     }
+
+    private float getScaledOffsetX(int degrees) {
+        switch(degrees) {
+            case 0:
+                return 0;
+            case 90:
+                return (float)(scaledImageHeight / 2) - (float)(scaledImageWidth / 2);
+            case 180:
+                return 0;
+            case 270:
+                return (float)(scaledImageHeight / 2) - (float)(scaledImageWidth / 2);
+            default:
+                return 0;
+        }
+    }
+
+    private float getScaledOffsetY(int degrees) {
+        switch(degrees) {
+            case 0:
+                return 0;
+            case 90:
+                return (float)(scaledImageWidth / 2) - (float)(scaledImageHeight / 2);
+            case 180:
+                return 0;
+            case 270:
+                return (float)(scaledImageWidth / 2) - (float)(scaledImageHeight / 2);
+            default:
+                return 0;
+        }
+    }
+
     /**
      * adjust image matrix as user drags or pinches
      */
@@ -305,22 +342,19 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
             value[VALUE_INDEX_SCALE_RATE_Y] = 2;
         }
 
-        if (imageWidth > width || imageHeight > height) {
 
-            // if image is downscaled, call callbacks
-            double scaleRate = (double)scaledImageWidth / fitScaledImageWith;
-            if(mListener != null && scaleRate < 1.0) {
-                mListener.onZoomOut(scaleRate);
+        // if (imageWidth > width || imageHeight > height) {
+        // if image is downscaled, call callbacks
+        double scaleRate = (double)scaledImageWidth / fitScaledImageWidth;
+        if(mListener != null && scaleRate < 1.0) {
+            mListener.onZoomOut(scaleRate);
+        }
+        if (ZOOM_OUT_LIMIT_RATE < scaleRate &&
+                scaledImageWidth < fitScaledImageWidth && mode == NONE) {
+            if(mListener != null) {
+                mListener.onZoomBackOn();
             }
-            if (scaledImageWidth < fitScaledImageWith && mode == NONE) {
-                if(mListener != null) {
-                    mListener.onZoomBackOn();
-                }
-                setImageFitOnView();
-            }
-        } else {
-            if (value[VALUE_INDEX_SCALE_RATE_X] < 1) value[VALUE_INDEX_SCALE_RATE_X] = 1;
-            if (value[VALUE_INDEX_SCALE_RATE_Y] < 1) value[VALUE_INDEX_SCALE_RATE_Y] = 1;
+            setImageFitOnView();
         }
         setCenter(false);
 

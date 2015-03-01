@@ -58,7 +58,7 @@ public class DetailViewFragment extends Fragment implements LoaderManager.Loader
                     int color = 0x000000 + (alpha * 0x1000000 );
                     mContentView.setBackgroundColor(color);
                 }
-                if(rate < 0.4) {
+                if(rate <= PinchToZoomImageView.ZOOM_OUT_LIMIT_RATE) {
                     getActivity().finish();
                 }
             }
