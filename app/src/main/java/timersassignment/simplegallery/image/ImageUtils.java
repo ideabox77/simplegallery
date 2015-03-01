@@ -23,6 +23,17 @@ import java.io.IOException;
  * @version 1.0
  */
 public class ImageUtils {
+
+    /**
+     *
+     * decodes bitmap image from resource
+     *
+     * @param res Resource object
+     * @param resId Resource is to decode
+     * @param reqWidth width to decode
+     * @param reqHeight height to decode
+     * @return
+     */
     static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -37,6 +48,15 @@ public class ImageUtils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
+    /**
+     *
+     * get sampled Bitmap image from path
+     *
+     * @param path image path
+     * @param reqWidth width to decode
+     * @param reqHeight height to decode
+     * @return
+     */
     static Bitmap decodeSampledBitmapFromPath(String path, int reqWidth, int reqHeight) {
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -50,6 +70,15 @@ public class ImageUtils {
         return BitmapFactory.decodeFile(path, options);
     }
 
+    /**
+     *
+     * find the best sample size for target size
+     *
+     * @param options Bitmap Options Object
+     * @param reqWidth target width
+     * @param reqHeight target height
+     * @return
+     */
     static int calculateInSampleSize(
             BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
@@ -72,6 +101,14 @@ public class ImageUtils {
         return inSampleSize;
     }
 
+    /**
+     *
+     * if Bitmap has degrees, recreate rotated bitmap
+     *
+     * @param bitmap original bitmap source
+     * @param degrees degress that tha bitmap has
+     * @return
+     */
     synchronized static Bitmap getRotatedBitmap(Bitmap bitmap, int degrees) {
         if ( degrees != 0 && bitmap != null ) {
             Matrix m = new Matrix();
@@ -90,6 +127,11 @@ public class ImageUtils {
         return bitmap;
     }
 
+    /**
+     * returns the Display Width pixel count
+     *
+     * @param context context for app
+     */
     public static int getDisplayWidthPixel(Context context) {
         Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -98,6 +140,11 @@ public class ImageUtils {
         return metrics.widthPixels;
     }
 
+    /**
+     * returns the Display Height pixel count
+     *
+     * @param context context for app
+     */
     public static int getDisplayHeightPixel(Context context) {
         Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();
@@ -106,6 +153,13 @@ public class ImageUtils {
         return metrics.heightPixels;
     }
 
+    /**
+     *
+     * get the Bitmap orientation with path
+     *
+     * @param filepath
+     * @return
+     */
     public static int getExifOrientation(String filepath) {
         int degree = 0;
         ExifInterface exif = null;

@@ -33,7 +33,6 @@ public class DetailViewFragment extends Fragment implements LoaderManager.Loader
      *
      * Callbacks to handle user pitch action
      *
-     * Created by Chobyungchul on 15. 2. 22..
      */
     interface ZoomCallbacks {
         public void onZoomBackOn();
