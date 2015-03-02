@@ -2,11 +2,13 @@ package timersassignment.simplegallery.image;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.SparseBooleanArray;
 import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,6 +21,7 @@ public class CheckableImageListAdapter extends ImageListAdapter
         implements View.OnClickListener{
     private boolean mCheckMode;
     private HashMap<Long, Boolean> mCheckedStateMap;
+    private SparseBooleanArray mArray;
 
     public CheckableImageListAdapter(Context context, boolean showTitle) {
         super(context, showTitle);
@@ -45,8 +48,28 @@ public class CheckableImageListAdapter extends ImageListAdapter
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return super.newView(context, cursor, parent);
+    public void changeCursor(Cursor cursor) {
+        updateCheckStates(cursor);
+        super.changeCursor(cursor);
+    }
+
+    private void updateCheckStates(Cursor cursor) {
+        if(cursor == null || cursor.getCount() == 0) {
+            mCheckedStateMap.clear();
+            return;
+        }
+
+        HashMap<Long, Boolean> newCheckState = new HashMap<Long, Boolean>();
+
+        cursor.moveToPosition(-1);
+        while(cursor.moveToNext()) {
+            Long id = cursor.getLong(ImageTable.COLUMN_INDEX_ID);
+            if(mCheckedStateMap.get(id)) {
+                newCheckState.put(id, true);
+            }
+        }
+
+        mCheckedStateMap = newCheckState;
     }
 
     @Override

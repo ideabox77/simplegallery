@@ -35,10 +35,11 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
 
     private static final String KEY_CHECK_STATE = "checkState";
     private static final String KEY_CHECK_MODE = "checkMode";
-    private CheckableGridFragmentListener mCheckListener;
     private static final int REQUEST_CODE_SHARE = 1001;
 
+    private CheckableGridFragmentListener mCheckListener;
     private CheckableImageListAdapter mImageAdapter;
+
     public interface CheckableGridFragmentListener {
         public void onCheckModeChanged();
         public void onCheckStateChanged(int count);
@@ -157,32 +158,6 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
         intent.setAction(GalleryIntents.ACTION_SHARE);
         intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
         getActivity().startService(intent);
-/*
-        if(checkedItems.size() == 0) {
-            Toast.makeText(getActivity(), R.string.item_no_selected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ArrayList<Uri> shareImageUriList = new ArrayList<Uri>();
-        for(int i=0; i< getGridView().getCount(); i++) {
-            Cursor cursor = (Cursor)getGridView().getItemAtPosition(i);
-            Integer id = cursor.getInt(ImageTable.COLUMN_INDEX_ID);
-            if(checkedItems.contains(id)) {
-                String path = cursor.getString(ImageTable.COLUMN_INDEX_DATA);
-                Uri imageUri = getImageUri(path);
-                if(imageUri != null) {
-                    shareImageUriList.add(imageUri);
-                }
-            }
-        }
-
-        if(!shareImageUriList.isEmpty()) {
-            Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-            intent.setType("image/jpg");
-            intent.putExtra(Intent.EXTRA_STREAM, shareImageUriList);
-            startActivity(Intent.createChooser(intent, "Choose"));
-        }
-        */
     }
 
     private Uri getImageUri(String path) {

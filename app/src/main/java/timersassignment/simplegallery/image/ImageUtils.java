@@ -8,7 +8,6 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -155,7 +154,7 @@ public class ImageUtils {
 
     /**
      *
-     * get the Bitmap orientation with path
+     * get the Bitmap orientation with
      *
      * @param filepath
      * @return
