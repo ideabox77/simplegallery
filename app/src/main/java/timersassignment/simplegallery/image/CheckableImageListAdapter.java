@@ -2,6 +2,7 @@ package timersassignment.simplegallery.image;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 
@@ -54,6 +55,10 @@ public class CheckableImageListAdapter extends ImageListAdapter
     }
 
     private void updateCheckStates(Cursor cursor) {
+        if(mCheckedStateMap == null) {
+            return;
+        }
+
         if(cursor == null || cursor.getCount() == 0) {
             mCheckedStateMap.clear();
             return;
@@ -64,7 +69,8 @@ public class CheckableImageListAdapter extends ImageListAdapter
         cursor.moveToPosition(-1);
         while(cursor.moveToNext()) {
             Long id = cursor.getLong(ImageTable.COLUMN_INDEX_ID);
-            if(mCheckedStateMap.get(id)) {
+            Boolean isChecked = mCheckedStateMap.get(id);
+            if(isChecked != null && isChecked) {
                 newCheckState.put(id, true);
             }
         }

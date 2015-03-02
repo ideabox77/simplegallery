@@ -4,6 +4,7 @@
     <string name="camera_roll_title">Camera Roll</string>
     <string name="share_title">Share Items</string>
     <string name="delete_title">Delete Items</string>
+    <string name="select_title">Select Items</string>
     <string name="camera_roll_popup_title">Input Title</string>
 
     <string name="common_ok">OK</string>
@@ -13,10 +14,12 @@
     <string name="image_update_complete">Image Update completed.</string>
 
     <string name="image_delete_message">Delete <xliff>%s</xliff> item(s)?</string>
+    <string name="image_delete_message_for_one">Delete <xliff>%s</xliff>?</string>
     <string name="item_selected_count"><xliff>%s</xliff> Item Selected</string>
     <string name="item_no_selected">No item selected.</string>
 
     <string name="error_share_failed">No Items to share</string>
+    <string name="error_image_information">Image Information in invalid.</string>
 
     <string name="main_quit">"Touch one more time to Exit"</string>
 </resources>

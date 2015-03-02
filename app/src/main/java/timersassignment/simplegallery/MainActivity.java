@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -44,6 +45,8 @@ public class MainActivity extends ActionBarActivity
         if(mMainFragment.isCheckMode()) {
             MenuItem cameraRoll = menu.findItem(R.id.action_camera_roll);
             cameraRoll.setVisible(false);
+            MenuItem selectMenu = menu.findItem(R.id.action_select_menu);
+            selectMenu.setVisible(false);
         } else {
             MenuItem delete = menu.findItem(R.id.action_delete);
             delete.setVisible(false);
@@ -60,16 +63,19 @@ public class MainActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_camera_roll) {
-            startActivity(new Intent(getApplicationContext(), CameraRollActivity.class));
-            return true;
-        }
-        if (id == R.id.action_delete) {
-            mMainFragment.deleteCheckedItems();
-        }
-
-        if (id == R.id.action_share) {
-            mMainFragment.shareCheckedItems();
+        switch(id) {
+            case R.id.action_camera_roll:
+                startActivity(new Intent(getApplicationContext(), CameraRollActivity.class));
+                return true;
+            case R.id.action_delete:
+                mMainFragment.deleteCheckedItems();
+                return true;
+            case R.id.action_share:
+                mMainFragment.shareCheckedItems();
+                return true;
+            case R.id.action_select_menu:
+                mMainFragment.setCheckMode(true);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

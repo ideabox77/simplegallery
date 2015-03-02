@@ -42,7 +42,7 @@ public class MainFragment extends CheckableImageGridFragment  {
         if(!isCheckMode()) {
             Intent intent = new Intent(getActivity(), DetailViewActivity.class);
             ImageListAdapter.ImageItem item  = (ImageListAdapter.ImageItem)view.getTag();
-            intent.putExtra(GalleryIntents.EXTRA_IMAGE_PATH, item.imagePath);
+            intent.putExtra(GalleryIntents.EXTRA_IMAGE_ID, id);
             startActivity(intent);
         }
     }

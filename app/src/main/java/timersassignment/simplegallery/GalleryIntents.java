@@ -13,6 +13,7 @@ public class GalleryIntents {
     public static final String ACTION_UPDATE = "timersassignment.simplegallery.update";
     public static final String ACTION_SHARE = "timersassignment.simplegallery.share";
 
+    public static final String EXTRA_IMAGE_ID = "timersassignment.simplegallery.id";
     public static final String EXTRA_IMAGE_IDS = "timersassignment.simplegallery.ids";
     public static final String EXTRA_IMAGE_URI = "timersassignment.simplegallery.uri";
     public static final String EXTRA_IMAGE_PATH = "timersassignment.simplegallery.path";

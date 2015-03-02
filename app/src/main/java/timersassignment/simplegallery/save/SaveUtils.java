@@ -1,8 +1,12 @@
 package timersassignment.simplegallery.save;
 
 import android.content.Context;
+import android.content.Intent;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import timersassignment.simplegallery.GalleryIntents;
 
 /**
  *
@@ -71,6 +75,20 @@ public class SaveUtils {
                 new File(dir, file[i]).delete();
             }
         }
+    }
+
+    public static void startDeleteItems(Context context, final ArrayList<Integer> items) {
+        Intent intent = new Intent(context, ImageSaveService.class);
+        intent.setAction(GalleryIntents.ACTION_DELETE);
+        intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
+        context.startService(intent);
+    }
+
+    public static void shareCheckedItems(Context context, final ArrayList<Integer> items) {
+        Intent intent = new Intent(context, ImageSaveService.class);
+        intent.setAction(GalleryIntents.ACTION_SHARE);
+        intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
+        context.startService(intent);
     }
 
 }

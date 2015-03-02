@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import timersassignment.simplegallery.GalleryIntents;
 import timersassignment.simplegallery.R;
@@ -30,11 +31,13 @@ public class DetailViewActivity extends Activity {
         super.onAttachFragment(fragment);
         Intent intent = getIntent();
         Uri uri = intent.getParcelableExtra(GalleryIntents.EXTRA_IMAGE_URI);
-        String path = intent.getStringExtra(GalleryIntents.EXTRA_IMAGE_PATH);
+        long id = intent.getLongExtra(GalleryIntents.EXTRA_IMAGE_ID, -1);
         if(uri != null && fragment instanceof DetailViewFragment) {
             ((DetailViewFragment)fragment).setImageUri(uri);
-        } else if(!TextUtils.isEmpty(path)) {
-            ((DetailViewFragment)fragment).setImagePath(path);
+        } else if(id > -1) {
+            ((DetailViewFragment)fragment).setImageId(id);
+        } else {
+            Toast.makeText(this, R.string.error_image_information, Toast.LENGTH_SHORT).show();
         }
     }
 

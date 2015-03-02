@@ -88,6 +88,8 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
     private float offsetX;
     private float offsetY;
 
+    private boolean pressed;
+
     private DetailViewFragment.ZoomCallbacks mListener;
 
     public PinchToZoomImageView(Context context) {
@@ -173,6 +175,7 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
         ImageView view = (ImageView) v;
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
+                pressed = true;
                 moveMatrix.set(matrix);
                 // When move, set start point
                 start.set(event.getX(), event.getY());
@@ -190,13 +193,25 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
             case MotionEvent.ACTION_POINTER_UP:
                 mode = NONE;
                 break;
+            case MotionEvent.ACTION_UP:
+                if(mListener != null && pressed) {
+                    mListener.onClick();
+                }
+                pressed = false;
+                break;
             case MotionEvent.ACTION_MOVE:
                 if (mode == DRAG) {
                     matrix.set(moveMatrix);
                     float xTrans = getRotateX(event.getX() - start.x, event.getY() - start.y, getOrientation());
                     float yTrans = getRotateY(event.getX() - start.x, event.getY() - start.y, getOrientation());
+
+                    float space = spacing(xTrans, yTrans);
+                    if(space > 0) {
+                        pressed = false;
+                    }
                     matrix.postTranslate(xTrans, yTrans);
                 } else if (mode == ZOOM) {
+                    pressed = false;
                     float newDist = spacing(event);
                     if (newDist > 5f) {
                         matrix.set(moveMatrix);
@@ -370,6 +385,10 @@ public class PinchToZoomImageView extends CanvasRotateImageView implements View.
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
         return FloatMath.sqrt(x * x + y * y);
+    }
+
+    private float spacing(float xTrans, float yTrans) {
+        return FloatMath.sqrt(xTrans * xTrans + yTrans * yTrans);
     }
 
     /**

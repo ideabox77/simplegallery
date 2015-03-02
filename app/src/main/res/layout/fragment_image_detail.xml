@@ -10,4 +10,41 @@
         android:layout_height="match_parent"
         android:clickable="true"
         />
+
+    <RelativeLayout
+        android:id="@+id/custom_action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_menu_height"
+        android:padding="@dimen/image_title_padding"
+        android:background="@color/actionbar_background"
+        android:visibility="gone"
+        >
+        <Button
+            android:id="@+id/action_delete"
+            android:layout_width="@dimen/custom_menu_button_size"
+            android:layout_height="@dimen/custom_menu_button_size"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/icon_del"
+            android:layout_centerVertical="true"
+            />
+        <Button
+            android:id="@+id/action_share"
+            android:layout_width="@dimen/custom_menu_button_size"
+            android:layout_height="@dimen/custom_menu_button_size"
+            android:layout_toLeftOf="@id/action_delete"
+            android:background="@drawable/icon_share"
+            android:layout_marginRight="@dimen/common_layout_padding"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_toLeftOf="@id/action_delete"
+            android:singleLine="true"
+            android:textSize="@dimen/custom_menu_text_size"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
 </FrameLayout>

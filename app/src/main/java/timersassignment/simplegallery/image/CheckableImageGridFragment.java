@@ -20,7 +20,6 @@ import java.util.HashMap;
 
 import timersassignment.simplegallery.GalleryIntents;
 import timersassignment.simplegallery.R;
-import timersassignment.simplegallery.save.ImageSaveService;
 import timersassignment.simplegallery.save.SaveUtils;
 
 /**
@@ -105,6 +104,7 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
                 mImageAdapter.setCheckMode(checkMode);
             }
             if(mCheckListener != null) {
+                updateCheckState();
                 mCheckListener.onCheckModeChanged();
             }
         }
@@ -146,18 +146,12 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     }
 
     private void startDeleteItems(final ArrayList<Integer> items) {
-        Intent intent = new Intent(getActivity(), ImageSaveService.class);
-        intent.setAction(GalleryIntents.ACTION_DELETE);
-        intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
-        getActivity().startService(intent);
+        SaveUtils.startDeleteItems(getActivity(), items);
     }
 
     public void shareCheckedItems() {
         ArrayList<Integer> items = mImageAdapter.getCheckedImageList();
-        Intent intent = new Intent(getActivity(), ImageSaveService.class);
-        intent.setAction(GalleryIntents.ACTION_SHARE);
-        intent.putExtra(GalleryIntents.EXTRA_IMAGE_IDS, items);
-        getActivity().startService(intent);
+        SaveUtils.startDeleteItems(getActivity(), items);
     }
 
     private Uri getImageUri(String path) {
@@ -187,9 +181,13 @@ public abstract class CheckableImageGridFragment extends ImageGridFragment
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if(isCheckMode()) {
             mImageAdapter.checkId(id);
-            if(mCheckListener != null) {
-                mCheckListener.onCheckStateChanged(mImageAdapter.getCheckedImageList().size());
-            }
+            updateCheckState();
+        }
+    }
+
+    private void updateCheckState() {
+        if(mCheckListener != null) {
+            mCheckListener.onCheckStateChanged(mImageAdapter.getCheckedImageList().size());
         }
     }
 
