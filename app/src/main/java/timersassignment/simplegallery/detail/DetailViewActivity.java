@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -18,7 +19,7 @@ import timersassignment.simplegallery.R;
  * @author Byungchul, Cho
  * @version 1.0
  */
-public class DetailViewActivity extends Activity {
+public class DetailViewActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

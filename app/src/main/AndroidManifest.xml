@@ -21,7 +21,7 @@
         </activity>
 
         <activity android:name=".detail.DetailViewActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:theme="@style/AppBlankTheme"
             />
 
         <activity android:name=".cameraroll.CameraRollActivity" />

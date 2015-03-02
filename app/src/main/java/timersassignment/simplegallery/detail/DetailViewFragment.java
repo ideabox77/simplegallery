@@ -206,6 +206,7 @@ public class DetailViewFragment extends Fragment
     private void setTitle(String title) {
         if(mTitleView != null && !TextUtils.isEmpty(title)) {
             mTitleView.setText(title);
+            mImageTitle = title;
         }
     }
 
