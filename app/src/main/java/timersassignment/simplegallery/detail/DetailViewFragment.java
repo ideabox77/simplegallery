@@ -156,7 +156,7 @@ public class DetailViewFragment extends Fragment
         if(id == LOADER_ID_IMAGE) {
             return new ImageLoader(getActivity(), mImageUri);
         } else {
-            return new InternalImageLoader(getActivity());
+            return new InternalImageLoader(getActivity(), mId);
         }
     }
 
